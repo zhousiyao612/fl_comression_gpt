@@ -10,8 +10,8 @@ def build_datasets(cfg):
         tfm = transforms.Compose([
             transforms.ToTensor(),
         ])
-        train_ds = datasets.CIFAR10(root="./data", train=True, download=True, transform=tfm)
-        test_ds = datasets.CIFAR10(root="./data", train=False, download=True, transform=tfm)
+        train_ds = datasets.CIFAR10(root="/root/autodl-pub/cifar-10", train=True, download=False, transform=tfm)
+        test_ds = datasets.CIFAR10(root="/root/autodl-pub/cifar-10", train=False, download=False, transform=tfm)
         test_loader = DataLoader(test_ds, batch_size=256, shuffle=False, num_workers=2)
         return train_ds, test_loader
 
