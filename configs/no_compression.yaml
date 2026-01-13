@@ -1,0 +1,41 @@
+seed: 42
+device: "cuda"
+
+task:
+  name: "cv"            # "cv" or "nlp"
+  dataset: "CIFAR10"    # CV demo
+  num_classes: 10
+
+federated:
+  rounds: 20
+  num_clients: 10
+  clients_per_round: 5
+  local_epochs: 5       # More local training
+  batch_size: 64
+  lr: 0.1               # Higher learning rate
+  optimizer: "sgd"      # "sgd" or "adam"
+  momentum: 0.9
+
+noniid:
+  enabled: false        # Start with IID to ensure basic convergence
+  method: "dirichlet"
+  alpha: 1.0
+  min_size: 50
+
+model:
+  family: "cnn"        # "cnn" | "vit" | "llm"
+  name: "resnet18"     # cnn: resnet18, mobilenet_v3_small...
+  vit_name: "vit_tiny_patch16_224"  # if family=vit (requires timm)
+  llm_name: "gpt2"     # if family=llm (requires transformers)
+  trainable_scope: "full"   # "full" | "head" | "lora_stub"
+
+compression:
+  enabled: false       # Disable compression first
+  method: "none"
+  topk_ratio: 0.1
+  quant_bits: 8
+  ef: true
+
+bits:
+  count_downlink: true
+  count_uplink: true

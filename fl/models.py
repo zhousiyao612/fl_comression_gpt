@@ -24,11 +24,43 @@ def build_cnn(cfg):
     if name == "resnet18":
         m = models.resnet18(weights=None)
         m.fc = nn.Linear(m.fc.in_features, num_classes)
+        
+        # Proper weight initialization
+        def init_weights(module):
+            if isinstance(module, nn.Conv2d):
+                nn.init.kaiming_normal_(module.weight, mode='fan_out', nonlinearity='relu')
+                if module.bias is not None:
+                    nn.init.constant_(module.bias, 0)
+            elif isinstance(module, nn.BatchNorm2d):
+                nn.init.constant_(module.weight, 1)
+                nn.init.constant_(module.bias, 0)
+            elif isinstance(module, nn.Linear):
+                nn.init.normal_(module.weight, 0, 0.01)
+                nn.init.constant_(module.bias, 0)
+        
+        m.apply(init_weights)
         return m
+        
     if name == "mobilenet_v3_small":
         m = models.mobilenet_v3_small(weights=None)
         m.classifier[-1] = nn.Linear(m.classifier[-1].in_features, num_classes)
+        
+        # Proper weight initialization
+        def init_weights(module):
+            if isinstance(module, nn.Conv2d):
+                nn.init.kaiming_normal_(module.weight, mode='fan_out', nonlinearity='relu')
+                if module.bias is not None:
+                    nn.init.constant_(module.bias, 0)
+            elif isinstance(module, nn.BatchNorm2d):
+                nn.init.constant_(module.weight, 1)
+                nn.init.constant_(module.bias, 0)
+            elif isinstance(module, nn.Linear):
+                nn.init.normal_(module.weight, 0, 0.01)
+                nn.init.constant_(module.bias, 0)
+        
+        m.apply(init_weights)
         return m
+        
     raise ValueError(f"Unknown CNN model: {name}")
 
 def build_vit(cfg):
