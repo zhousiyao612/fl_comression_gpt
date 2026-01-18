@@ -12,14 +12,14 @@ federated:
   clients_per_round: 5
   local_epochs: 1
   batch_size: 64
-  lr: 0.01
+  lr: 0.1
   optimizer: "sgd"      # "sgd" or "adam"
   momentum: 0.9
 
 noniid:
   enabled: true
   method: "dirichlet"
-  alpha: 0.3           # 越小越 non-iid
+  alpha: 100          # 越小越 non-iid
   min_size: 50
 
 model:

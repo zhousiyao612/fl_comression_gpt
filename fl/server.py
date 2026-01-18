@@ -1,6 +1,8 @@
 import random
 import torch
+from fl.utils import get_model_state, set_model_sta
 from fl.utils import get_model_state, set_model_state
+from fl.metrics import estimate_full_model_bits
 
 class Server:
     def __init__(self, model, compressor, device):
