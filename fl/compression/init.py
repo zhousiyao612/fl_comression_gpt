@@ -30,7 +30,7 @@ class TopKCompressor(Compressor):
                 t = t + e
 
             idx, val, n = topk_sparsify(t, self.topk_ratio)
-            comp[name] = (idx.cpu(), val.cpu(), n)
+            comp[name] = (idx.cpu(), val.cpu(), n, list(t.shape))
 
             # bits estimate:
             # idx: store as int32 -> 32 bits each
@@ -51,12 +51,12 @@ class TopKCompressor(Compressor):
     def decompress_uplink(self, payload, meta=None):
         out = {}
         for name, pack in payload.items():
-            idx, val, n = pack
+            idx, val, n, shape = pack
             idx = idx.to(torch.long)
             val = val.to(torch.float32)
             dense = torch.zeros(n, dtype=torch.float32)
             dense[idx] = val
-            out[name] = dense
+            out[name] = dense.view(shape)
         return out
 
 class Quant8Compressor(Compressor):
